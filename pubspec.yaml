@@ -31,7 +31,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  google_fonts: ^2.3.1
+  font_awesome_flutter: ^10.1.0
+  google_fonts: ^2.3.2
   hexcolor: ^2.0.6
 
 dev_dependencies:
