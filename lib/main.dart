@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:travel_app/widgets/destination_carousel.dart';
+import 'package:travel_app/widgets/package_carousel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,13 +23,13 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF3F5F7),
       ),
-      home: MainScreen(),
+      home: const MainScreen(),
     );
   }
 }
 
 class MainScreen extends StatefulWidget {
-  MainScreen({Key? key}) : super(key: key);
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -35,6 +37,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  int _currentTab = 0;
   final List<IconData> _icons = [
     FontAwesomeIcons.plane,
     FontAwesomeIcons.car,
@@ -73,62 +76,87 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40),
-          child: ListView(
-            children: [
-              Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 50),
-                  child: Text(
-                    'What would you like to find?',
-                    style: GoogleFonts.poppins(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        fontSize: 27.0),
-                  )),
-              const SizedBox(
-                height: 20.0,
-              ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  // transforming _icons into a map with index as keys and IconData as the values then converting the map into an iterable using the .entries.map then for each element building an icon by passing the index
-                  children: _icons
-                      .asMap()
-                      .entries
-                      .map((MapEntry e) => _buildIcons(e.key))
-                      .toList()),
-              SizedBox(height: 20),
-              // creating pages based on which button is pressed right now
+        child: ListView(
+          children: [
+            Padding(
+                padding: const EdgeInsets.only(left: 20, right: 50, top: 20),
+                child: Text(
+                  'What would you like to find?',
+                  style: GoogleFonts.poppins(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                      fontSize: 27.0),
+                )),
+            const SizedBox(
+              height: 10.0,
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                // transforming _icons into a map with index as keys and IconData as the values then converting the map into an iterable using the .entries.map then for each element building an icon by passing the index
+                children: _icons
+                    .asMap()
+                    .entries
+                    .map((MapEntry e) => _buildIcons(e.key))
+                    .toList()),
+            const SizedBox(height: 20),
+            // creating pages based on which button is pressed right now
+            const DestinationCarousel(),
+            const SizedBox(height: 10.0),
+            const PackageCarousel(),
+            //for the first button (plane)
+            // if (_selectedIndex == 0)
+            //   // Top Destinations
 
-              //for the first button (plane)
-              if (_selectedIndex == 0)
-                // Top Destinations
-                Container(
-                  color: Colors.yellow,
-                  height: MediaQuery.of(context).size.height * 0.32,
-                  width: MediaQuery.of(context).size.width,
-                )
+            // // for the second button (car)
+            // else if (_selectedIndex == 1)
+            //   Container(color: Colors.blue, height: 200, width: 200)
 
-              // for the second button (car)
-              else if (_selectedIndex == 1)
-                Container(color: Colors.blue, height: 200, width: 200)
+            // //for the third button (parachute)
+            // else if (_selectedIndex == 2)
+            //   Container(color: Colors.cyan, height: 200, width: 200)
 
-              //for the third button (parachute)
-              else if (_selectedIndex == 2)
-                Container(color: Colors.cyan, height: 200, width: 200)
-
-              //for the fourth button (bicycle)
-              else
-                Container(
-                  color: Colors.orange,
-                  height: 200,
-                  width: 200,
-                )
-            ],
-          ),
+            // //for the fourth button (bicycle)
+            // else
+            //   Container(
+            //     color: Colors.orange,
+            //     height: 200,
+            //     width: 200,
+            //   )
+          ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          currentIndex: _currentTab,
+          onTap: (int value) {
+            setState(() {
+              _currentTab = value;
+            });
+          },
+          items: const [
+            BottomNavigationBarItem(
+              label: '',
+              icon: Icon(
+                Icons.search,
+                size: 30.0,
+              ),
+            ),
+            BottomNavigationBarItem(
+                label: '',
+                icon: Icon(
+                  Icons.location_pin,
+                  size: 30.0,
+                )),
+            BottomNavigationBarItem(
+                label: '',
+                icon: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      'https://www.kindpng.com/picc/m/207-2074624_white-gray-circle-avatar-png-transparent-png.png'),
+                  radius: 15,
+                ))
+          ]),
     );
   }
 }
